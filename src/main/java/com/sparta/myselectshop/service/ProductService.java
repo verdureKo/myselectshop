@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -36,4 +39,13 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
+    public List<ProductResponseDto> getProducts() {
+        List<Product> productList = productRepository.findAll();    // 단축키 var: 배열 만들어줌
+        List<ProductResponseDto> responseDtoList = new ArrayList<>();
+        for (Product product : productList) {   // 단축키 iter: 반복문 만들어줌
+            responseDtoList.add(new ProductResponseDto(product));
+        }
+
+        return responseDtoList;
+    }
 }
