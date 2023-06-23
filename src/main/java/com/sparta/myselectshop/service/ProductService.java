@@ -29,8 +29,37 @@ public class ProductService {
     public ProductResponseDto createProduct(ProductRequestDto requestDto, User user) {
       Product product =  productRepository.save(new Product(requestDto, user));
       return  new ProductResponseDto(product);
-  }
-    @Transactional
+    }
+    
+    public Page<ProductResponseDto> getProducts(User user, int page, int size, String sortBy, boolean isAsc) {
+        
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;  // 페이징 처리
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // 접속자 권한 가져와서 관리자 권한이면 전체, 사용자 권한이면 지가 관심한거
+        UserRoleEnum userRoleEnum = user.getRole();
+
+        Page<Product> productList;
+
+        if (userRoleEnum == UserRoleEnum.USER) {
+            productList = productRepository.findAllByUser(user, pageable);  // 조건 true 면
+        } else {
+            productList = productRepository.findAll(pageable); // 조건 false 면
+        }
+        return productList.map(ProductResponseDto::new); // Page 타입으로 변경
+    }
+
+    public List<ProductResponseDto> getAllProducts() {
+        List<Product> productList = productRepository.findAll();
+        List<ProductResponseDto> responseDtoList = new ArrayList<>();
+        for (Product product : productList) {   // iter 단축키로 반복문 만들수 있음
+            responseDtoList.add(new ProductResponseDto(product));
+        }
+        return responseDtoList;
+    }
+
+    @Transactional  //  영속성 환경 dirtyChecking
     public ProductResponseDto updateProduct(Long id, ProductMypriceRequestDto requestDto) {
         int myprice = requestDto.getMyprice();
         if (myprice < MIN_MY_PRICE) {
@@ -46,43 +75,11 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
-    public Page<ProductResponseDto> getProducts(User user,
-                                                int page, int size, String sortBy, boolean isAsc) {
-        // 페이징 처리
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        // 사용자 권한 가져와서 ADMIN 이면 전체 조회, USER 면 본인이 추가한 부분 조회
-        UserRoleEnum userRoleEnum = user.getRole();
-
-        Page<Product> productList;
-
-        if (userRoleEnum == UserRoleEnum.USER) {
-            // 사용자 권한이 USER 일 경우
-            productList = productRepository.findAllByUser(user, pageable);
-        } else {
-            productList = productRepository.findAll(pageable);
-        }
-
-        return productList.map(ProductResponseDto::new); // Page 타입으로 변경
-    }
-
-    @Transactional
+    @Transactional  // 성동일
     public void updateBySearch(Long id, ItemDto itemDto) {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new NullPointerException("해당 상품은 존재하지 않습니다.")
         );
         product.updateByItemDto(itemDto);
-    }
-
-    public List<ProductResponseDto> getAllProducts() {
-        List<Product> productList = productRepository.findAll();
-        List<ProductResponseDto> responseDtoList = new ArrayList<>();
-        for (Product product : productList) {   // iter 단축키로 반복문 만들수 있음
-            responseDtoList.add(new ProductResponseDto(product));
-        }
-
-        return responseDtoList;
     }
 }

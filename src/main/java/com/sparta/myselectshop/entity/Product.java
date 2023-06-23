@@ -37,11 +37,11 @@ public class Product extends Timestamped {
     @Column(nullable = false)
     private int myprice;
     
-    @ManyToOne(fetch = FetchType.LAZY) // N:1 연관관계 설정, FetchType.LAZY: 모든상황에서 필요하지 않기때문
+    @ManyToOne(fetch = FetchType.LAZY) // N:1 연관관계 설정, FetchType.LAZY: 모든상황에서 필요하지 않기때문......하.. 지연
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product")  // 1:N 연관관계 설정, mappedBy: FK 주인 설정
     private List<ProductFolder> productFolderList = new ArrayList<>();
 
     public Product(ProductRequestDto requestDto, User user) {
@@ -56,7 +56,5 @@ public class Product extends Timestamped {
         this.myprice = requestDto.getMyprice();
     }
 
-    public void updateByItemDto(ItemDto itemDto) {
-        this.lprice = itemDto.getLprice();
-    }
+    public void updateByItemDto(ItemDto itemDto) { this.lprice = itemDto.getLprice(); }
 }

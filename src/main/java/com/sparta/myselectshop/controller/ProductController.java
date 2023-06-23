@@ -21,16 +21,9 @@ public class ProductController {
 
     // 관심 상품 등록하기
     @PostMapping("/products")
-    public ProductResponseDto createProduct(@RequestBody  ProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ProductResponseDto createProduct(@RequestBody ProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 응답 보내기
         return productService.createProduct(requestDto, userDetails.getUser());
-    }
-
-    // 관심 상품 희망 최저가 등록하기
-    @PutMapping("/products/{id}")
-    public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductMypriceRequestDto requestDto) {
-        // 응답 보내기
-        return productService.updateProduct(id, requestDto);
     }
 
     // 관심 상품 조회하기
@@ -50,5 +43,11 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    // 관심 상품 희망 최저가 등록하기
+    @PutMapping("/products/{id}")
+    public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductMypriceRequestDto requestDto) {
+        // 응답 보내기
+        return productService.updateProduct(id, requestDto);
+    }
 
 }
