@@ -30,7 +30,8 @@ public class ProductService {
       Product product =  productRepository.save(new Product(requestDto, user));
       return  new ProductResponseDto(product);
     }
-    
+
+    @Transactional(readOnly = true)  // 지연로딩 기능을 사용하기위해 트랜젝션 리드온리 트루옵션 사용
     public Page<ProductResponseDto> getProducts(User user, int page, int size, String sortBy, boolean isAsc) {
         
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;  // 페이징 처리
