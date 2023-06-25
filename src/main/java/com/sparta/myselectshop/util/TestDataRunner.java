@@ -36,22 +36,22 @@ public class TestDataRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         // 테스트 User 생성
-        User testUser = new User("Robbie", passwordEncoder.encode("1234"), "robbie@sparta.com", UserRoleEnum.USER);
+        User testUser = new User("Pureum", passwordEncoder.encode("1234"), "pureum@test.test", UserRoleEnum.USER);
         testUser = userRepository.save(testUser);
 
         // 테스트 User 의 관심상품 등록
         // 검색어 당 관심상품 10개 등록
-        createTestData(testUser, "신발");
-        createTestData(testUser, "과자");
-        createTestData(testUser, "키보드");
-        createTestData(testUser, "휴지");
-        createTestData(testUser, "휴대폰");
-        createTestData(testUser, "앨범");
-        createTestData(testUser, "헤드폰");
-        createTestData(testUser, "이어폰");
-        createTestData(testUser, "노트북");
-        createTestData(testUser, "무선 이어폰");
-        createTestData(testUser, "모니터");
+        createTestData(testUser, "하네스");
+        createTestData(testUser, "사료");
+        createTestData(testUser, "강아지 간식");
+        createTestData(testUser, "노즈워크");
+        createTestData(testUser, "배변패드");
+        createTestData(testUser, "개껌");
+        createTestData(testUser, "애견 영양제");
+        createTestData(testUser, "리드줄");
+        createTestData(testUser, "강아지 샴푸");
+        createTestData(testUser, "강아지 집");
+        createTestData(testUser, "고구마");
     }
 
     private void createTestData(User user, String searchWord) {
