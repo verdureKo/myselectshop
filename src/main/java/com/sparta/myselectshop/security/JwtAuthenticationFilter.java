@@ -47,13 +47,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtUtil.createToken(username, role); // 토큰 생성
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token); // 헤더에 토큰담기
+        String token = jwtUtil.createToken(username, role);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);    // Client 쪽에서 인증 실패시의 응답값으로는 response 객체, content-type, 메세지 등을 담아 보낼 수 있다.
+        response.setStatus(401);
     }
 
 }

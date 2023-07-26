@@ -19,7 +19,6 @@ public class ProductResponseDto {
     private int myprice;
 
     private List<FolderResponseDto> productFolderList = new ArrayList<>();
-
     public ProductResponseDto(Product product) {
         this.id = product.getId();
         this.title = product.getTitle();
@@ -27,8 +26,8 @@ public class ProductResponseDto {
         this.image = product.getImage();
         this.lprice = product.getLprice();
         this.myprice = product.getMyprice();
-        for (ProductFolder productFolder : product.getProductFolderList()) {   // product 조회시 지연로딩을 사용해
-            productFolderList.add(new FolderResponseDto(productFolder.getFolder()));    // productFolder를 사용해 넣어줌
+        for (ProductFolder productFolder : product.getProductFolderList()) {
+            productFolderList.add(new FolderResponseDto(productFolder.getFolder()));
         }
     }
 }

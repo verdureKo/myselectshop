@@ -31,21 +31,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String tokenValue = jwtUtil.getJwtFromHeader(req);  // 순수한 Token 가져오기
+        String tokenValue = jwtUtil.getJwtFromHeader(req);
 
-        if (StringUtils.hasText(tokenValue)) {  // 확인
+        if (StringUtils.hasText(tokenValue)) {
 
-            if (!jwtUtil.validateToken(tokenValue)) {   // 검증
+            if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
                 return;
             }
 
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 정보 뽑기
+            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
 
             try {
-                setAuthentication(info.getSubject());   // 인증
+                setAuthentication(info.getSubject());
             } catch (Exception e) {
-                log.error(e.getMessage()); // 에러는 예외처리(로그 메세지)
+                log.error(e.getMessage());
                 return;
             }
         }
@@ -55,11 +55,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // 인증 처리
     public void setAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext(); // 인증 객체 생성
-        Authentication authentication = createAuthentication(username); // 정보 넣기
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
 
-        SecurityContextHolder.setContext(context); // ContextHolder에 Set한다
+        SecurityContextHolder.setContext(context);
     }
 
     // 인증 객체 생성
